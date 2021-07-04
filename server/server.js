@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-// import ApolloServer
+// importing the ApolloServer
 const { ApolloServer } = require("apollo-server-express");
 
 const db = require("./config/connection");
@@ -12,12 +12,14 @@ const PORT = process.env.PORT || 3001;
 
 const { typeDefs, resolvers } = require("./schema");
 
+// create a new apollo server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: authMiddleware,
 });
 
+// integrate apollo server with express app as middleware
 server.applyMiddleware({ app });
 
 app.use(express.urlencoded({ extended: true }));
@@ -32,7 +34,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
-// app.use(routes);
+app.use(routes);
 
 db.once("open", () => {
   app.listen(PORT, () => {
